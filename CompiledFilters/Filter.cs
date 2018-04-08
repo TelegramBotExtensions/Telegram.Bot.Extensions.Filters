@@ -26,6 +26,44 @@ namespace CompiledFilters
         protected static ParameterExpression parameter = Expression.Parameter(typeof(T));
         protected static ConstantExpression trueExpr = Expression.Constant(true, typeof(bool));
 
+        /// <summary>
+        /// Negates the result of a <see cref="Filter{T}"/> using a <see cref="NotFilter{T}"/>.
+        /// </summary>
+        /// <param name="filter">The filter to evaluate.</param>
+        /// <returns>The <see cref="NotFilter{T}"/> negating it.</returns>
+        public static Filter<T> operator !(Filter<T> filter)
+        {
+            return new NotFilter<T>(filter);
+        }
+
+        /// <summary>
+        /// Links two <see cref="Filter{T}"/>s together using an <see cref="AndFilter{T}"/>.
+        /// </summary>
+        /// <param name="lhs">The first filter to evaluate.</param>
+        /// <param name="rhs">The second filter to evaluate.</param>
+        /// <returns>An <see cref="AndFilter{T}"/> joining them.</returns>
+        public static Filter<T> operator &(Filter<T> lhs, Filter<T> rhs)
+        {
+            return new AndFilter<T>(lhs, rhs);
+        }
+
+        /// <summary>
+        /// Links two <see cref="Filter{T}"/>s together using a <see cref="XorFilter{T}"/>.
+        /// </summary>
+        /// <param name="lhs">The first filter to evaluate.</param>
+        /// <param name="rhs">The second filter to evaluate.</param>
+        /// <returns>A <see cref="XorFilter{T}"/> joining them.</returns>
+        public static Filter<T> operator ^(Filter<T> lhs, Filter<T> rhs)
+        {
+            return new XorFilter<T>(lhs, rhs);
+        }
+
+        /// <summary>
+        /// Links two <see cref="Filter{T}"/>s together using an <see cref="OrFilter{T}"/>.
+        /// </summary>
+        /// <param name="lhs">The first filter to evaluate.</param>
+        /// <param name="rhs">The second filter to evaluate.</param>
+        /// <returns>An <see cref="OrFilter{T}"/> joining them.</returns>
         public static Filter<T> operator |(Filter<T> lhs, Filter<T> rhs)
         {
             return new OrFilter<T>(lhs, rhs);
