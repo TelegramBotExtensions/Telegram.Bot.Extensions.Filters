@@ -11,8 +11,8 @@ namespace Telegram.Bot.Extensions.MessageFilters
 
         protected override Expression GetFilterExpression()
         {
-            var fromProperty = Expression.Property(parameter, "From");
-            var isBotProperty = Expression.Property(fromProperty, "IsBot");
+            var fromProperty = Expression.Property(parameter, nameof(Message.From));
+            var isBotProperty = Expression.Property(fromProperty, nameof(User.IsBot));
             var condition = Expression.Equal(fromProperty, nullExpr);
 
             return Expression.Condition(condition, falseExpr, isBotProperty);
