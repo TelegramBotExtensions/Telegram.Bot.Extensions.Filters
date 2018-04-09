@@ -1,7 +1,10 @@
 using System;
 using System.Linq.Expressions;
+using Telegram.Bot.Extensions.Filters.CompiledFilters.Filters;
 
-namespace CompiledFilters
+// ReSharper disable StaticMemberInGenericType
+
+namespace Telegram.Bot.Extensions.Filters.CompiledFilters
 {
     /// <summary>
     /// Delegate for the compiled filtering functions created
@@ -10,6 +13,7 @@ namespace CompiledFilters
     /// <typeparam name="T">The type of the items that are filtered.</typeparam>
     /// <param name="item">The item to be filtered.</param>
     /// <returns>Whether the given item satisfies the filter conditions.</returns>
+    // ReSharper disable once TypeParameterCanBeVariant
     public delegate bool CompiledFilter<T>(T item);
 
     /// <summary>
@@ -21,10 +25,10 @@ namespace CompiledFilters
     /// <typeparam name="T">The type of the items.</typeparam>
     public abstract class Filter<T>
     {
-        protected static ConstantExpression falseExpr = Expression.Constant(false, typeof(bool));
-        protected static ConstantExpression nullExpr = Expression.Constant(null);
-        protected static ParameterExpression parameter = Expression.Parameter(typeof(T));
-        protected static ConstantExpression trueExpr = Expression.Constant(true, typeof(bool));
+        protected static readonly ConstantExpression FalseExpr = Expression.Constant(false, typeof(bool));
+        protected static readonly ConstantExpression NullExpr = Expression.Constant(null);
+        protected static readonly ParameterExpression Parameter = Expression.Parameter(typeof(T));
+        protected static readonly ConstantExpression TrueExpr = Expression.Constant(true, typeof(bool));
 
         public static implicit operator Filter<T>(Func<T, bool> predicate)
         {
@@ -32,9 +36,7 @@ namespace CompiledFilters
         }
 
         public static implicit operator Filter<T>(Expression<Func<T, bool>> predicate)
-        {
-            return (ExpressionFilter<T>)predicate;
-        }
+            => (ExpressionFilter<T>)predicate;
 
         /// <summary>
         /// Negates the result of a <see cref="Filter{T}"/> using a <see cref="NotFilter{T}"/>.
@@ -42,9 +44,7 @@ namespace CompiledFilters
         /// <param name="filter">The filter to evaluate.</param>
         /// <returns>The <see cref="NotFilter{T}"/> negating it.</returns>
         public static NotFilter<T> operator !(Filter<T> filter)
-        {
-            return new NotFilter<T>(filter);
-        }
+            => new NotFilter<T>(filter);
 
         /// <summary>
         /// Links two <see cref="Filter{T}"/>s together using an <see cref="AndFilter{T}"/>.
@@ -53,9 +53,7 @@ namespace CompiledFilters
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>An <see cref="AndFilter{T}"/> joining them.</returns>
         public static AndFilter<T> operator &(Filter<T> lhs, Filter<T> rhs)
-        {
-            return new AndFilter<T>(lhs, rhs);
-        }
+            => new AndFilter<T>(lhs, rhs);
 
         /// <summary>
         /// Links two <see cref="Filter{T}"/>s together using a <see cref="XorFilter{T}"/>.
@@ -64,9 +62,7 @@ namespace CompiledFilters
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>A <see cref="XorFilter{T}"/> joining them.</returns>
         public static XorFilter<T> operator ^(Filter<T> lhs, Filter<T> rhs)
-        {
-            return new XorFilter<T>(lhs, rhs);
-        }
+            => new XorFilter<T>(lhs, rhs);
 
         /// <summary>
         /// Links two <see cref="Filter{T}"/>s together using an <see cref="OrFilter{T}"/>.
@@ -75,9 +71,7 @@ namespace CompiledFilters
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>An <see cref="OrFilter{T}"/> joining them.</returns>
         public static OrFilter<T> operator |(Filter<T> lhs, Filter<T> rhs)
-        {
-            return new OrFilter<T>(lhs, rhs);
-        }
+            => new OrFilter<T>(lhs, rhs);
 
         /// <summary>
         /// Compiles the current filter construction into a function
@@ -85,9 +79,7 @@ namespace CompiledFilters
         /// </summary>
         /// <returns>Whether the conditions are satisfied.</returns>
         public CompiledFilter<T> Compile()
-        {
-            return Expression.Lambda<CompiledFilter<T>>(GetFilterExpression(), parameter).Compile();
-        }
+            => Expression.Lambda<CompiledFilter<T>>(GetFilterExpression(), Parameter).Compile();
 
         /// <summary>
         /// Helper method to get the <see cref="Expression"/>s from other <see cref="Filter{T}"/>s in derived classes.
@@ -95,9 +87,7 @@ namespace CompiledFilters
         /// <param name="filter">The <see cref="Filter{T}"/> to get the <see cref="Expression"/> from.</param>
         /// <returns></returns>
         protected static Expression GetFilterExpression(Filter<T> filter)
-        {
-            return filter.GetFilterExpression();
-        }
+            => filter.GetFilterExpression();
 
         /// <summary>
         /// Must return the <see cref="Expression"/> that represents the Filter.

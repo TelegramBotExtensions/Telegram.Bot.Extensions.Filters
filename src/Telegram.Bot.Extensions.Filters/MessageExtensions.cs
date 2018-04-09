@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
-using CompiledFilters;
+using Telegram.Bot.Extensions.Filters.CompiledFilters;
 using Telegram.Bot.Types;
 
-namespace Telegram.Bot.Extensions.MessageFilters
+namespace Telegram.Bot.Extensions.Filters
 {
     public static class MessageExtensions
     {

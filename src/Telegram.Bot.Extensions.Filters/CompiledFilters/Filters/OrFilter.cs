@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace CompiledFilters
+namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
 {
     /// <summary>
     /// Implements a filter that evaluates to true if any of the other two <see cref="Filter{T}"/>s do.
@@ -10,8 +8,8 @@ namespace CompiledFilters
     /// <typeparam name="T">The type of the items.</typeparam>
     public sealed class OrFilter<T> : Filter<T>
     {
-        private readonly Filter<T> lhs;
-        private readonly Filter<T> rhs;
+        private readonly Filter<T> _lhs;
+        private readonly Filter<T> _rhs;
 
         /// <summary>
         /// Creates a new instance of the <see cref="OrFilter{T}"/> class,
@@ -21,13 +19,13 @@ namespace CompiledFilters
         /// <param name="rhs">The second filter to evaluate.</param>
         public OrFilter(Filter<T> lhs, Filter<T> rhs)
         {
-            this.lhs = lhs;
-            this.rhs = rhs;
+            _lhs = lhs;
+            _rhs = rhs;
         }
 
         protected override Expression GetFilterExpression()
-        {
-            return Expression.Or(GetFilterExpression(lhs), GetFilterExpression(rhs));
-        }
+            => Expression.Or(
+                GetFilterExpression(_lhs),
+                GetFilterExpression(_rhs));
     }
 }
