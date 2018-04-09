@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
-using CompiledFilters;
+using Telegram.Bot.Extensions.Filters.CompiledFilters;
 using Telegram.Bot.Types;
 
-namespace Telegram.Bot.Extensions.MessageFilters
+namespace Telegram.Bot.Extensions.Filters.Messages
 {
     public sealed class IsBotFilter : Filter<Message>
     {
@@ -11,11 +11,11 @@ namespace Telegram.Bot.Extensions.MessageFilters
 
         protected override Expression GetFilterExpression()
         {
-            var fromProperty = Expression.Property(parameter, nameof(Message.From));
+            var fromProperty = Expression.Property(Parameter, nameof(Message.From));
             var isBotProperty = Expression.Property(fromProperty, nameof(User.IsBot));
-            var condition = Expression.Equal(fromProperty, nullExpr);
+            var condition = Expression.Equal(fromProperty, NullExpr);
 
-            return Expression.Condition(condition, falseExpr, isBotProperty);
+            return Expression.Condition(condition, FalseExpr, isBotProperty);
         }
     }
 }
