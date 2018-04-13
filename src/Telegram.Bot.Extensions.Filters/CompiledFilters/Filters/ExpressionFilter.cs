@@ -18,7 +18,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
         public static implicit operator ExpressionFilter<T>(Expression<Func<T, bool>> predicate)
             => new ExpressionFilter<T>(predicate);
 
-        protected override Expression GetFilterExpression()
+        private protected override Expression GetFilterExpression()
             => _expression;
     }
 }

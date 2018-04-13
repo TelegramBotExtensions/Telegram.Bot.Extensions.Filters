@@ -20,7 +20,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
         public static implicit operator FuncFilter<T>(Func<T, bool> predicate)
             => new FuncFilter<T>(predicate);
 
-        protected override Expression GetFilterExpression()
+        private protected override Expression GetFilterExpression()
             => _callFunc;
     }
 }

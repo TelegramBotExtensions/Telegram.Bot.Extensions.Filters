@@ -5,7 +5,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Extensions.Filters.Messages
 {
-    public class TextFilter : Filter<Message>
+    public sealed class TextFilter : Filter<Message>
     {
         private readonly ConstantExpression _text;
 
@@ -17,7 +17,7 @@ namespace Telegram.Bot.Extensions.Filters.Messages
             _text = Expression.Constant(text, typeof(string));
         }
 
-        protected override Expression GetFilterExpression()
+        private protected override Expression GetFilterExpression()
         {
             var textProperty = Expression.Property(Parameter, nameof(Message.Text));
             var typeProperty = Expression.Property(Parameter, nameof(Message.Type));

@@ -30,6 +30,9 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
         protected static readonly ParameterExpression Parameter = Expression.Parameter(typeof(T));
         protected static readonly ConstantExpression TrueExpr = Expression.Constant(true, typeof(bool));
 
+        private protected Filter()
+        { }
+
         public static implicit operator Filter<T>(Func<T, bool> predicate)
         {
             return (FuncFilter<T>)predicate;
@@ -43,7 +46,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
         /// </summary>
         /// <param name="filter">The filter to evaluate.</param>
         /// <returns>The <see cref="NotFilter{T}"/> negating it.</returns>
-        public static NotFilter<T> operator !(Filter<T> filter)
+        public static Filter<T> operator !(Filter<T> filter)
             => new NotFilter<T>(filter);
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>An <see cref="AndFilter{T}"/> joining them.</returns>
-        public static AndFilter<T> operator &(Filter<T> lhs, Filter<T> rhs)
+        public static Filter<T> operator &(Filter<T> lhs, Filter<T> rhs)
             => new AndFilter<T>(lhs, rhs);
 
         /// <summary>
@@ -61,7 +64,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>A <see cref="XorFilter{T}"/> joining them.</returns>
-        public static XorFilter<T> operator ^(Filter<T> lhs, Filter<T> rhs)
+        public static Filter<T> operator ^(Filter<T> lhs, Filter<T> rhs)
             => new XorFilter<T>(lhs, rhs);
 
         /// <summary>
@@ -70,7 +73,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>An <see cref="OrFilter{T}"/> joining them.</returns>
-        public static OrFilter<T> operator |(Filter<T> lhs, Filter<T> rhs)
+        public static Filter<T> operator |(Filter<T> lhs, Filter<T> rhs)
             => new OrFilter<T>(lhs, rhs);
 
         /// <summary>
@@ -86,13 +89,13 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
         /// </summary>
         /// <param name="filter">The <see cref="Filter{T}"/> to get the <see cref="Expression"/> from.</param>
         /// <returns></returns>
-        protected static Expression GetFilterExpression(Filter<T> filter)
+        private protected static Expression GetFilterExpression(Filter<T> filter)
             => filter.GetFilterExpression();
 
         /// <summary>
         /// Must return the <see cref="Expression"/> that represents the Filter.
         /// </summary>
         /// <returns>The <see cref="Expression"/> representing the Filter.</returns>
-        protected abstract Expression GetFilterExpression();
+        private protected abstract Expression GetFilterExpression();
     }
 }
