@@ -8,24 +8,15 @@ namespace CompiledFilters.Filters
     /// <typeparam name="T">The type of the items.</typeparam>
     internal sealed class AndFilter<T> : Filter<T>
     {
-        private readonly Filter<T> _lhs;
-        private readonly Filter<T> _rhs;
-
         /// <summary>
-        /// Creates a new instance of the <see cref="OrFilter{T}"/> class,
+        /// Creates a new instance of the <see cref="AndFilter{T}"/> class,
         /// that evaluates to true if both of the two given <see cref="Filter{T}"/>s does.
         /// </summary>
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
         public AndFilter(Filter<T> lhs, Filter<T> rhs)
         {
-            _lhs = lhs;
-            _rhs = rhs;
+            FilterExpression = Expression.And(lhs.FilterExpression, rhs.FilterExpression);
         }
-
-        private protected override Expression GetFilterExpression()
-            => Expression.And(
-                GetFilterExpression(_lhs),
-                GetFilterExpression(_rhs));
     }
 }

@@ -78,10 +78,15 @@ namespace CompiledFilters
     /// <typeparam name="T">The type of the items.</typeparam>
     public abstract class Filter<T>
     {
-        private protected static readonly ConstantExpression FalseExpr = Expression.Constant(false, typeof(bool));
-        private protected static readonly ConstantExpression NullExpr = Expression.Constant(null);
+        /// <summary>
+        /// The parameter refering to the item to be checked.
+        /// </summary>
         private protected static readonly ParameterExpression Parameter = Expression.Parameter(typeof(T));
-        private protected static readonly ConstantExpression TrueExpr = Expression.Constant(true, typeof(bool));
+
+        /// <summary>
+        /// Gets the <see cref="Expression"/> representing this Filter.
+        /// </summary>
+        internal virtual Expression FilterExpression { get; private protected set; }
 
         private protected Filter()
         { }
@@ -127,20 +132,6 @@ namespace CompiledFilters
         /// </summary>
         /// <returns>Whether the conditions are satisfied.</returns>
         public CompiledFilter<T> Compile()
-            => Expression.Lambda<CompiledFilter<T>>(GetFilterExpression(), Parameter).Compile();
-
-        /// <summary>
-        /// Helper method to get the <see cref="Expression"/>s from other <see cref="Filter{T}"/>s in derived classes.
-        /// </summary>
-        /// <param name="filter">The <see cref="Filter{T}"/> to get the <see cref="Expression"/> from.</param>
-        /// <returns></returns>
-        private protected static Expression GetFilterExpression(Filter<T> filter)
-            => filter.GetFilterExpression();
-
-        /// <summary>
-        /// Must return the <see cref="Expression"/> that represents the Filter.
-        /// </summary>
-        /// <returns>The <see cref="Expression"/> representing the Filter.</returns>
-        private protected abstract Expression GetFilterExpression();
+            => Expression.Lambda<CompiledFilter<T>>(FilterExpression, Parameter).Compile();
     }
 }

@@ -10,18 +10,13 @@ namespace CompiledFilters
     /// <typeparam name="T">The type of the items.</typeparam>
     public abstract class CustomFilter<T> : Filter<T>
     {
-        private readonly MethodCallExpression callFunc;
-
         public CustomFilter()
         {
-            callFunc = Expression.Call(
+            FilterExpression = Expression.Call(
                 Expression.Constant(this),
                 ((Predicate<T>)Matches).Method,
                 Parameter);
         }
-
-        private protected override Expression GetFilterExpression()
-            => callFunc;
 
         /// <summary>
         /// Determines whether the given item matches the filter.
