@@ -17,7 +17,7 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         [Fact]
         public void Test1()
         {
-            var filter = MessageFilters.IsBot.Compile();
+            var filter = MessageFilters.IsBot.GetCompiledFilter();
 
             Assert.True(filter(_message));
         }

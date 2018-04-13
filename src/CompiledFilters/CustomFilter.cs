@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace CompiledFilters
 {
@@ -10,12 +9,12 @@ namespace CompiledFilters
     /// <typeparam name="T">The type of the items.</typeparam>
     public abstract class CustomFilter<T> : Filter<T>
     {
-        public CustomFilter()
+        /// <summary>
+        /// Creates a new instance of the derived <see cref="CustomFilter{T}"/>.
+        /// </summary>
+        protected CustomFilter()
         {
-            FilterExpression = Expression.Call(
-                Expression.Constant(this),
-                ((Predicate<T>)Matches).Method,
-                Parameter);
+            FilterExpression = ((Predicate<T>)Matches).GetMethodCall(Parameter);
         }
 
         /// <summary>

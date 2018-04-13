@@ -1,5 +1,4 @@
 using System;
-using System.Linq.Expressions;
 
 namespace CompiledFilters.Filters
 {
@@ -16,12 +15,7 @@ namespace CompiledFilters.Filters
         /// <param name="predicate">The function to use.</param>
         public FuncFilter(Predicate<T> predicate)
         {
-            FilterExpression = Expression.Call(
-                predicate.Target == null
-                    ? null
-                    : Expression.Constant(predicate.Target),
-                predicate.Method,
-                Parameter);
+            FilterExpression = predicate.GetMethodCall(Parameter);
         }
     }
 }
