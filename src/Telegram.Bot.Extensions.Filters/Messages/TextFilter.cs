@@ -1,32 +1,21 @@
-﻿using System.Linq.Expressions;
-using Telegram.Bot.Extensions.Filters.CompiledFilters;
+using CompiledFilters;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Telegram.Bot.Extensions.Filters.Messages
 {
-    public sealed class TextFilter : Filter<Message>
+    public sealed class TextFilter : CustomFilter<Message>
     {
-        private readonly ConstantExpression _text;
+        private readonly string _text;
 
-        private static readonly ConstantExpression TypeExpr
-            = Expression.Constant(MessageType.Text, typeof(MessageType));
-
-        public TextFilter(string text = default)
+        public TextFilter(string text)
         {
-            _text = Expression.Constant(text, typeof(string));
+            _text = text;
         }
 
-        private protected override Expression GetFilterExpression()
+        protected override bool Matches(Message item)
         {
-            var textProperty = Expression.Property(Parameter, nameof(Message.Text));
-            var typeProperty = Expression.Property(Parameter, nameof(Message.Type));
-            var typeCondition = Expression.NotEqual(typeProperty, TypeExpr);
-            var nullTextParamCondition = Expression.Equal(textProperty, NullExpr);
-            var textEqualityCondition = Expression.Equal(textProperty, _text);
-
-            return Expression.Condition(typeCondition, FalseExpr,
-                Expression.Condition(nullTextParamCondition, TrueExpr, textEqualityCondition));
+            return item.Type == MessageType.Text && item.Text == _text;
         }
     }
 }

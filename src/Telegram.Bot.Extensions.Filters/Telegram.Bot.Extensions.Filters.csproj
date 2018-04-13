@@ -6,4 +6,7 @@
   <ItemGroup>
     <PackageReference Include="Telegram.Bot" Version="14.2.0-rc-452" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CompiledFilters\CompiledFilters.csproj" />
+  </ItemGroup>
 </Project>

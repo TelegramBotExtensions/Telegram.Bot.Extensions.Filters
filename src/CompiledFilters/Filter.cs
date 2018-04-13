@@ -1,10 +1,10 @@
 using System;
 using System.Linq.Expressions;
-using Telegram.Bot.Extensions.Filters.CompiledFilters.Filters;
+using CompiledFilters.Filters;
 
 // ReSharper disable StaticMemberInGenericType
 
-namespace Telegram.Bot.Extensions.Filters.CompiledFilters
+namespace CompiledFilters
 {
     /// <summary>
     /// Delegate for the compiled filtering functions created
@@ -14,7 +14,14 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
     /// <param name="item">The item to be filtered.</param>
     /// <returns>Whether the given item satisfies the filter conditions.</returns>
     // ReSharper disable once TypeParameterCanBeVariant
-    public delegate bool CompiledFilter<T>(T item);
+    public delegate bool CompiledFilter<in T>(T item);
+
+    public static class Filter
+    {
+        public static Filter<T> FromLambda<T>(Expression<Predicate<T>> predicate) => new ExpressionFilter<T>(predicate);
+
+        public static Filter<T> FromMethod<T>(Predicate<T> predicate) => new FuncFilter<T>(predicate);
+    }
 
     /// <summary>
     /// The base class for all filters.
@@ -25,54 +32,46 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
     /// <typeparam name="T">The type of the items.</typeparam>
     public abstract class Filter<T>
     {
-        protected static readonly ConstantExpression FalseExpr = Expression.Constant(false, typeof(bool));
-        protected static readonly ConstantExpression NullExpr = Expression.Constant(null);
-        protected static readonly ParameterExpression Parameter = Expression.Parameter(typeof(T));
-        protected static readonly ConstantExpression TrueExpr = Expression.Constant(true, typeof(bool));
+        private protected static readonly ConstantExpression FalseExpr = Expression.Constant(false, typeof(bool));
+        private protected static readonly ConstantExpression NullExpr = Expression.Constant(null);
+        private protected static readonly ParameterExpression Parameter = Expression.Parameter(typeof(T));
+        private protected static readonly ConstantExpression TrueExpr = Expression.Constant(true, typeof(bool));
 
         private protected Filter()
         { }
 
-        public static implicit operator Filter<T>(Func<T, bool> predicate)
-        {
-            return (FuncFilter<T>)predicate;
-        }
-
-        public static implicit operator Filter<T>(Expression<Func<T, bool>> predicate)
-            => (ExpressionFilter<T>)predicate;
-
         /// <summary>
-        /// Negates the result of a <see cref="Filter{T}"/> using a <see cref="NotFilter{T}"/>.
+        /// Negates the result of a <see cref="Filter{T}"/>.
         /// </summary>
         /// <param name="filter">The filter to evaluate.</param>
-        /// <returns>The <see cref="NotFilter{T}"/> negating it.</returns>
+        /// <returns>The negated <see cref="Filter{T}"/>.</returns>
         public static Filter<T> operator !(Filter<T> filter)
             => new NotFilter<T>(filter);
 
         /// <summary>
-        /// Links two <see cref="Filter{T}"/>s together using an <see cref="AndFilter{T}"/>.
+        /// Links two <see cref="Filter{T}"/>s together using a binary and.
         /// </summary>
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
-        /// <returns>An <see cref="AndFilter{T}"/> joining them.</returns>
+        /// <returns>The joined <see cref="Filter{T}"/>s.</returns>
         public static Filter<T> operator &(Filter<T> lhs, Filter<T> rhs)
             => new AndFilter<T>(lhs, rhs);
 
         /// <summary>
-        /// Links two <see cref="Filter{T}"/>s together using a <see cref="XorFilter{T}"/>.
+        /// Links two <see cref="Filter{T}"/>s together using a binary xor.
         /// </summary>
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
-        /// <returns>A <see cref="XorFilter{T}"/> joining them.</returns>
+        /// <returns>The joined <see cref="Filter{T}"/>s</returns>
         public static Filter<T> operator ^(Filter<T> lhs, Filter<T> rhs)
             => new XorFilter<T>(lhs, rhs);
 
         /// <summary>
-        /// Links two <see cref="Filter{T}"/>s together using an <see cref="OrFilter{T}"/>.
+        /// Links two <see cref="Filter{T}"/>s together using a binary or.
         /// </summary>
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
-        /// <returns>An <see cref="OrFilter{T}"/> joining them.</returns>
+        /// <returns>The joined <see cref="Filter{T}"/>s.</returns>
         public static Filter<T> operator |(Filter<T> lhs, Filter<T> rhs)
             => new OrFilter<T>(lhs, rhs);
 
