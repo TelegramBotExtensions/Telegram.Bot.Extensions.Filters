@@ -1,7 +1,24 @@
+using System;
+using System.Linq;
 using System.Linq.Expressions;
 
-namespace Telegram.Bot.Extensions.Filters.CompiledFilters
+namespace CompiledFilters.Filters
 {
+    internal sealed class ExpressionFilter<T> : Filter<T>
+    {
+        private readonly Expression expression;
+
+        public ExpressionFilter(Expression<Predicate<T>> predicate)
+        {
+            var parameterReplacer = new ParameterReplacer(predicate.Parameters.Single(), Parameter);
+
+            expression = parameterReplacer.Visit(predicate);
+        }
+
+        private protected override Expression GetFilterExpression()
+            => expression;
+    }
+
     internal class ParameterReplacer : ExpressionVisitor
     {
         private readonly ParameterExpression _source;

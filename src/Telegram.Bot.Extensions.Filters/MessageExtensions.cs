@@ -1,4 +1,4 @@
-using Telegram.Bot.Extensions.Filters.CompiledFilters;
+using CompiledFilters;
 using Telegram.Bot.Types;
 
 namespace Telegram.Bot.Extensions.Filters

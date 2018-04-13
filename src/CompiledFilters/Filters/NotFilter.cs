@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
+namespace CompiledFilters.Filters
 {
     /// <summary>
     /// Implements a filter that evaluates to true if the given <see cref="Filter{T}"/> doesn't and vise versa.

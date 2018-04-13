@@ -1,10 +1,10 @@
 using System;
 using System.Linq.Expressions;
-using Telegram.Bot.Extensions.Filters.CompiledFilters.Filters;
+using CompiledFilters.Filters;
 
 // ReSharper disable StaticMemberInGenericType
 
-namespace Telegram.Bot.Extensions.Filters.CompiledFilters
+namespace CompiledFilters
 {
     /// <summary>
     /// Delegate for the compiled filtering functions created
@@ -15,6 +15,13 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
     /// <returns>Whether the given item satisfies the filter conditions.</returns>
     // ReSharper disable once TypeParameterCanBeVariant
     public delegate bool CompiledFilter<in T>(T item);
+
+    public static class Filter
+    {
+        public static Filter<T> FromLambda<T>(Expression<Predicate<T>> predicate) => new ExpressionFilter<T>(predicate);
+
+        public static Filter<T> FromMethod<T>(Predicate<T> predicate) => new FuncFilter<T>(predicate);
+    }
 
     /// <summary>
     /// The base class for all filters.
@@ -32,14 +39,6 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters
 
         private protected Filter()
         { }
-
-        public static implicit operator Filter<T>(Func<T, bool> predicate)
-        {
-            return (FuncFilter<T>)predicate;
-        }
-
-        public static implicit operator Filter<T>(Expression<Func<T, bool>> predicate)
-            => (ExpressionFilter<T>)predicate;
 
         /// <summary>
         /// Negates the result of a <see cref="Filter{T}"/>.

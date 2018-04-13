@@ -1,15 +1,15 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
+namespace CompiledFilters.Filters
 {
-    public sealed class FuncFilter<T> : Filter<T>
+    internal sealed class FuncFilter<T> : Filter<T>
     {
-        private readonly MethodCallExpression _callFunc;
+        private readonly MethodCallExpression callFunc;
 
-        public FuncFilter(Func<T, bool> predicate)
+        public FuncFilter(Predicate<T> predicate)
         {
-            _callFunc = Expression.Call(
+            callFunc = Expression.Call(
                 predicate.Target == null
                     ? null
                     : Expression.Constant(predicate.Target),
@@ -17,10 +17,10 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
                 Parameter);
         }
 
-        public static implicit operator FuncFilter<T>(Func<T, bool> predicate)
+        public static implicit operator FuncFilter<T>(Predicate<T> predicate)
             => new FuncFilter<T>(predicate);
 
         private protected override Expression GetFilterExpression()
-            => _callFunc;
+            => callFunc;
     }
 }
