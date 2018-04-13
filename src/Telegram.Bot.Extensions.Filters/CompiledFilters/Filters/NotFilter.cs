@@ -6,7 +6,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
     /// Implements a filter that evaluates to true if the given <see cref="Filter{T}"/> doesn't and vise versa.
     /// </summary>
     /// <typeparam name="T">The type of the items.</typeparam>
-    public sealed class NotFilter<T> : Filter<T>
+    internal sealed class NotFilter<T> : Filter<T>
     {
         private readonly Filter<T> _filter;
 
@@ -20,7 +20,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
             _filter = filter;
         }
 
-        protected override Expression GetFilterExpression()
+        private protected override Expression GetFilterExpression()
             => Expression.Not(GetFilterExpression(_filter));
     }
 }

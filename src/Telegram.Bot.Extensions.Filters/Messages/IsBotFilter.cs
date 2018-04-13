@@ -9,7 +9,7 @@ namespace Telegram.Bot.Extensions.Filters.Messages
         internal IsBotFilter()
         { }
 
-        protected override Expression GetFilterExpression()
+        private protected override Expression GetFilterExpression()
         {
             var fromProperty = Expression.Property(Parameter, nameof(Message.From));
             var isBotProperty = Expression.Property(fromProperty, nameof(User.IsBot));

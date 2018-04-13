@@ -6,7 +6,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
     /// Implements a filter that evaluates to true if any of the other two <see cref="Filter{T}"/>s do.
     /// </summary>
     /// <typeparam name="T">The type of the items.</typeparam>
-    public sealed class OrFilter<T> : Filter<T>
+    internal sealed class OrFilter<T> : Filter<T>
     {
         private readonly Filter<T> _lhs;
         private readonly Filter<T> _rhs;
@@ -23,7 +23,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
             _rhs = rhs;
         }
 
-        protected override Expression GetFilterExpression()
+        private protected override Expression GetFilterExpression()
             => Expression.Or(
                 GetFilterExpression(_lhs),
                 GetFilterExpression(_rhs));

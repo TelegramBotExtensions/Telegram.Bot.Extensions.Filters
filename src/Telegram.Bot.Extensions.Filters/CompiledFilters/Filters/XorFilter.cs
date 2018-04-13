@@ -7,7 +7,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
     /// or the other of the other two <see cref="Filter{T}"/>s do.
     /// </summary>
     /// <typeparam name="T">The type of the items.</typeparam>
-    public sealed class XorFilter<T> : Filter<T>
+    internal sealed class XorFilter<T> : Filter<T>
     {
         private readonly Filter<T> _lhs;
         private readonly Filter<T> _rhs;
@@ -24,7 +24,7 @@ namespace Telegram.Bot.Extensions.Filters.CompiledFilters.Filters
             _rhs = rhs;
         }
 
-        protected override Expression GetFilterExpression()
+        private protected override Expression GetFilterExpression()
             => Expression.ExclusiveOr(
                 GetFilterExpression(_lhs),
                 GetFilterExpression(_rhs));
