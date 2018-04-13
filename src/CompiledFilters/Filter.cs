@@ -16,15 +16,61 @@ namespace CompiledFilters
     // ReSharper disable once TypeParameterCanBeVariant
     public delegate bool CompiledFilter<in T>(T item);
 
+    /// <summary>
+    /// Contains factory methods for the different <see cref="Filter{T}"/>s.
+    /// </summary>
     public static class Filter
     {
+        /// <summary>
+        /// Links two <see cref="Filter{T}"/>s together using a binary and.
+        /// </summary>
+        /// <param name="lhs">The first filter to evaluate.</param>
+        /// <param name="rhs">The second filter to evaluate.</param>
+        /// <returns>The joined <see cref="Filter{T}"/>s.</returns>
+        public static Filter<T> And<T>(Filter<T> lhs, Filter<T> rhs) => lhs & rhs;
+
+        /// <summary>
+        /// Creates a <see cref="Filter{T}"/> from Lambda Expression.
+        /// </summary>
+        /// <typeparam name="T">The type of the items.</typeparam>
+        /// <param name="predicate">The filter function.</param>
+        /// <returns>The <see cref="Filter{T}"/> using the given function.</returns>
         public static Filter<T> FromLambda<T>(Expression<Predicate<T>> predicate) => new ExpressionFilter<T>(predicate);
 
+        /// <summary>
+        /// Creates a <see cref="Filter{T}"/> from a delegate.
+        /// </summary>
+        /// <typeparam name="T">The type of the items.</typeparam>
+        /// <param name="predicate">The filter function.</param>
+        /// <returns>The <see cref="Filter{T}"/> using the given function.</returns>
         public static Filter<T> FromMethod<T>(Predicate<T> predicate) => new FuncFilter<T>(predicate);
+
+        /// <summary>
+        /// Negates the result of a <see cref="Filter{T}"/>.
+        /// </summary>
+        /// <param name="filter">The filter to evaluate.</param>
+        /// <returns>The negated <see cref="Filter{T}"/>.</returns>
+        public static Filter<T> Not<T>(Filter<T> filter) => !filter;
+
+        /// <summary>
+        /// Links two <see cref="Filter{T}"/>s together using a binary or.
+        /// </summary>
+        /// <param name="lhs">The first filter to evaluate.</param>
+        /// <param name="rhs">The second filter to evaluate.</param>
+        /// <returns>The joined <see cref="Filter{T}"/>s.</returns>
+        public static Filter<T> Or<T>(Filter<T> lhs, Filter<T> rhs) => lhs | rhs;
+
+        /// <summary>
+        /// Links two <see cref="Filter{T}"/>s together using a binary xor.
+        /// </summary>
+        /// <param name="lhs">The first filter to evaluate.</param>
+        /// <param name="rhs">The second filter to evaluate.</param>
+        /// <returns>The joined <see cref="Filter{T}"/>s</returns>
+        public static Filter<T> Xor<T>(Filter<T> lhs, Filter<T> rhs) => lhs ^ rhs;
     }
 
     /// <summary>
-    /// The base class for all filters.
+    /// The base class for all filters. Use <see cref="CustomFilter{T}"/> to derive your own.
     /// <para/>
     /// Allows one to build easily readable expressions and compile them
     /// into a function that determines if they hold for a given input.
