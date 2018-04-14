@@ -14,7 +14,7 @@ namespace CompiledFilters
     public delegate bool CompiledFilter<in T>(T item);
 
     /// <summary>
-    /// Contains factory methods for the different <see cref="Filter{T}"/>s.
+    /// Contains factory and convenience methods for the different <see cref="Filter{T}"/>s.
     /// </summary>
     public static class Filter
     {
@@ -24,7 +24,7 @@ namespace CompiledFilters
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>The joined <see cref="Filter{T}"/>s.</returns>
-        public static Filter<T> And<T>(Filter<T> lhs, Filter<T> rhs) => lhs & rhs;
+        public static Filter<T> And<T>(this Filter<T> lhs, Filter<T> rhs) => lhs & rhs;
 
         /// <summary>
         /// Gives a <see cref="Filter{T}"/> that always evaluates to false.
@@ -39,7 +39,7 @@ namespace CompiledFilters
         /// <typeparam name="T">The type of the items.</typeparam>
         /// <param name="filter">The filter to evaluate.</param>
         /// <returns>The negated <see cref="Filter{T}"/>.</returns>
-        public static Filter<T> Not<T>(Filter<T> filter) => !filter;
+        public static Filter<T> Not<T>(this Filter<T> filter) => !filter;
 
         /// <summary>
         /// Links two <see cref="Filter{T}"/>s together using a binary or.
@@ -48,33 +48,7 @@ namespace CompiledFilters
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>The joined <see cref="Filter{T}"/>s.</returns>
-        public static Filter<T> Or<T>(Filter<T> lhs, Filter<T> rhs) => lhs | rhs;
-
-        /// <summary>
-        /// Gives a <see cref="Filter{T}"/> that transposes the
-        /// item type for the other filter and returns what it evaluates to.
-        /// </summary>
-        /// <typeparam name="T">The type of the items.</typeparam>
-        /// <typeparam name="S">The type that the items are transposed to.</typeparam>
-        /// <param name="transpose">The function that transposes from T to S.</param>
-        /// <param name="filter">The filter to evaluate.</param>
-        /// <returns>A <see cref="Filter{T}"/> that transposes the
-        /// item type for the other filter and returns what it evaluates to.</returns>
-        public static Filter<T> Select<T, S>(Expression<Func<T, S>> transpose, Filter<S> filter)
-            => new SelectFilter<T, S>(transpose, filter);
-
-        /// <summary>
-        /// Gives a <see cref="Filter{T}"/> that transposes the
-        /// item type for the other filter and returns what it evaluates to.
-        /// </summary>
-        /// <typeparam name="T">The type of the items.</typeparam>
-        /// <typeparam name="S">The type that the items are transposed to.</typeparam>
-        /// <param name="transpose">The function that transposes from T to S.</param>
-        /// <param name="filter">The filter to evaluate.</param>
-        /// <returns>A <see cref="Filter{T}"/> that transposes the
-        /// item type for the other filter and returns what it evaluates to.</returns>
-        public static Filter<T> SelectMethod<T, S>(Func<T, S> transpose, Filter<S> filter)
-            => new SelectFilter<T, S>(item => transpose(item), filter);
+        public static Filter<T> Or<T>(this Filter<T> lhs, Filter<T> rhs) => lhs | rhs;
 
         /// <summary>
         /// Gives a <see cref="Filter{T}"/> that always evaluates to true.
@@ -82,6 +56,30 @@ namespace CompiledFilters
         /// <typeparam name="T">The type of the items.</typeparam>
         /// <returns>A <see cref="Filter{T}"/> that always evaluates to true.</returns>
         public static Filter<T> True<T>() => new TrueFilter<T>();
+
+        /// <summary>
+        /// Turns a <see cref="Filter{S}"/> into a <see cref="Filter{T}"/>
+        /// using the provided transpose function to go from T to S.
+        /// </summary>
+        /// <typeparam name="T">The type of the items.</typeparam>
+        /// <typeparam name="S">The type that the items are transposed to.</typeparam>
+        /// <param name="filter">The filter to evaluate.</param>
+        /// <param name="transpose">The function that transposes from T to S.</param>
+        /// <returns>The <see cref="Filter{S}"/> as a <see cref="Filter{T}"/>.</returns>
+        public static Filter<T> Using<T, S>(this Filter<S> filter, Expression<Func<T, S>> transpose)
+            => new SelectFilter<T, S>(transpose, filter);
+
+        /// <summary>
+        /// Turns a <see cref="Filter{S}"/> into a <see cref="Filter{T}"/>
+        /// using the provided transpose function to go from T to S.
+        /// </summary>
+        /// <typeparam name="T">The type of the items.</typeparam>
+        /// <typeparam name="S">The type that the items are transposed to.</typeparam>
+        /// <param name="filter">The filter to evaluate.</param>
+        /// <param name="transpose">The function that transposes from T to S.</param>
+        /// <returns>The <see cref="Filter{S}"/> as a <see cref="Filter{T}"/>.</returns>
+        public static Filter<T> UsingMethod<T, S>(this Filter<S> filter, Func<T, S> transpose)
+            => new SelectFilter<T, S>(item => transpose(item), filter);
 
         /// <summary>
         /// Creates a <see cref="Filter{T}"/> from a Lambda Expression.
@@ -106,7 +104,7 @@ namespace CompiledFilters
         /// <param name="lhs">The first filter to evaluate.</param>
         /// <param name="rhs">The second filter to evaluate.</param>
         /// <returns>The joined <see cref="Filter{T}"/>s</returns>
-        public static Filter<T> Xor<T>(Filter<T> lhs, Filter<T> rhs) => lhs ^ rhs;
+        public static Filter<T> Xor<T>(this Filter<T> lhs, Filter<T> rhs) => lhs ^ rhs;
     }
 
     /// <summary>

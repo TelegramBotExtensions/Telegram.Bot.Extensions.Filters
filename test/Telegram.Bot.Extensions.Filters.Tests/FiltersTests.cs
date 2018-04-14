@@ -36,9 +36,9 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         [Fact]
         public void Test3()
         {
-            var filter = (Filter.Select(
-                              (Message msg) => msg.From,
-                              Filter.With((User user) => user.IsBot))
+            var filter = (Filter.Using(
+                              Filter.With((User user) => user.IsBot),
+                (Message msg) => msg.From)
                          & new TextFilter("foo")).GetCompiledFilter();
 
             Assert.True(filter(_message));
