@@ -25,6 +25,14 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         }
 
         [Fact]
+        public void Test2()
+        {
+            var filter = Filter.FromMethod<Message>(testFilter).GetCompiledFilter();
+
+            Assert.True(filter(_message));
+        }
+
+        [Fact]
         public void Test3()
         {
             var filter = (Filter.Select(
@@ -42,5 +50,7 @@ namespace Telegram.Bot.Extensions.Filters.Tests
 
             Assert.True(filter(_message));
         }
+
+        private static bool testFilter(Message m) => true;
     }
 }

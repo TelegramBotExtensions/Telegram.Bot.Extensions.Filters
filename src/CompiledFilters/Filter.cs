@@ -120,8 +120,8 @@ namespace CompiledFilters
 
         private protected Filter()
         {
-            compiledFilter = new Lazy<CompiledFilter<T>>(
-                Expression.Lambda<CompiledFilter<T>>(FilterExpression, Parameter).Compile);
+            compiledFilter = new Lazy<CompiledFilter<T>>(() =>
+                Expression.Lambda<CompiledFilter<T>>(FilterExpression, Parameter).Compile());
         }
 
         /// <summary>
