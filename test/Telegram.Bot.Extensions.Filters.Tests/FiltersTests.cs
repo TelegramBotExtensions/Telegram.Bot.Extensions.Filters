@@ -11,7 +11,8 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         {
             From = new User
             {
-                IsBot = true
+                IsBot = true,
+                Id = 123456
             },
             Text = "foo"
         };
@@ -50,6 +51,21 @@ namespace Telegram.Bot.Extensions.Filters.Tests
 
             Assert.True(filter(_message));
         }
+
+        // Compiler prevents Expression with body.
+        //[Fact]
+        //public void TestExpressionBody()
+        //{
+        //    var filter = Filter.With((Message msg) =>
+        //    {
+        //        var userId = msg.From.Id;
+        //        ++userId;
+
+        //        return userId > 1;
+        //    }).GetCompiledFilter();
+
+        //    Assert.True(filter(_message));
+        //}
 
         private static bool testFilter(Message m) => true;
     }
