@@ -11,7 +11,6 @@ namespace CompiledFilters
     /// <typeparam name="T">The type of the items that are filtered.</typeparam>
     /// <param name="item">The item to be filtered.</param>
     /// <returns>Whether the given item satisfies the filter conditions.</returns>
-    // ReSharper disable once TypeParameterCanBeVariant
     public delegate bool CompiledFilter<in T>(T item);
 
     /// <summary>
@@ -136,6 +135,20 @@ namespace CompiledFilters
             compiledFilter = new Lazy<CompiledFilter<T>>(() =>
                 Expression.Lambda<CompiledFilter<T>>(FilterExpression, Parameter).Compile());
         }
+
+        /// <summary>
+        /// Implicitly casts a <see cref="Filter{T}"/> to a <see cref="Func{T, bool}"/> (for Linq, etc.).
+        /// </summary>
+        /// <param name="filter">The filter to cast.</param>
+        public static implicit operator Func<T, bool>(Filter<T> filter)
+            => new Func<T, bool>(filter.GetCompiledFilter());
+
+        /// <summary>
+        /// Implicitly casts a <see cref="Filter{T}"/> to a <see cref="Predicate{T}"/> (for Linq, etc.).
+        /// </summary>
+        /// <param name="filter">The filter to cast.</param>
+        public static implicit operator Predicate<T>(Filter<T> filter)
+            => new Predicate<T>(filter.GetCompiledFilter());
 
         /// <summary>
         /// Negates the result of a <see cref="Filter{T}"/>.
