@@ -6,12 +6,9 @@ namespace CompiledFilters
 {
     internal static class DelegateExtension
     {
-        public static MethodCallExpression GetMethodCall(this Delegate function, params Expression[] parameters)
+        public static Expression GetInvocation(this Delegate function, Expression parameter)
         {
-            return Expression.Call(
-                function.Target == null ? null : Expression.Constant(function.Target),
-                function.Method,
-                parameters);
+            return Expression.Invoke(Expression.Constant(function), parameter);
         }
     }
 }
