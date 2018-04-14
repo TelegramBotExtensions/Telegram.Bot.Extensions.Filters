@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace CompiledFilters.Filters
 {
@@ -16,11 +18,12 @@ namespace CompiledFilters.Filters
         /// </summary>
         /// <param name="transpose">The function that transposes from T to S.</param>
         /// <param name="filter">The filter to evaluate.</param>
-        public SelectFilter(Func<T, S> transpose, Filter<S> filter)
+        public SelectFilter(Expression<Func<T, S>> transpose, Filter<S> filter)
         {
+            var parameterReplacer = new ParameterReplacer(transpose.Parameters.Single(), Parameter);
             var compiledFilter = filter.GetCompiledFilter();
 
-            FilterExpression = compiledFilter.GetMethodCall(transpose.GetMethodCall(Parameter));
+            FilterExpression = compiledFilter.GetInvocation(parameterReplacer.Visit(transpose));
         }
     }
 }

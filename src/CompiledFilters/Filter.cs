@@ -35,22 +35,6 @@ namespace CompiledFilters
         public static Filter<T> False<T>() => new FalseFilter<T>();
 
         /// <summary>
-        /// Creates a <see cref="Filter{T}"/> from Lambda Expression.
-        /// </summary>
-        /// <typeparam name="T">The type of the items.</typeparam>
-        /// <param name="predicate">The filter function.</param>
-        /// <returns>The <see cref="Filter{T}"/> using the given function.</returns>
-        public static Filter<T> FromLambda<T>(Expression<Predicate<T>> predicate) => new ExpressionFilter<T>(predicate);
-
-        /// <summary>
-        /// Creates a <see cref="Filter{T}"/> from a delegate.
-        /// </summary>
-        /// <typeparam name="T">The type of the items.</typeparam>
-        /// <param name="predicate">The filter function.</param>
-        /// <returns>The <see cref="Filter{T}"/> using the given function.</returns>
-        public static Filter<T> FromMethod<T>(Predicate<T> predicate) => new FuncFilter<T>(predicate);
-
-        /// <summary>
         /// Negates the result of a <see cref="Filter{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the items.</typeparam>
@@ -77,8 +61,21 @@ namespace CompiledFilters
         /// <param name="filter">The filter to evaluate.</param>
         /// <returns>A <see cref="Filter{T}"/> that transposes the
         /// item type for the other filter and returns what it evaluates to.</returns>
-        public static Filter<T> Select<T, S>(Func<T, S> transpose, Filter<S> filter)
+        public static Filter<T> Select<T, S>(Expression<Func<T, S>> transpose, Filter<S> filter)
             => new SelectFilter<T, S>(transpose, filter);
+
+        /// <summary>
+        /// Gives a <see cref="Filter{T}"/> that transposes the
+        /// item type for the other filter and returns what it evaluates to.
+        /// </summary>
+        /// <typeparam name="T">The type of the items.</typeparam>
+        /// <typeparam name="S">The type that the items are transposed to.</typeparam>
+        /// <param name="transpose">The function that transposes from T to S.</param>
+        /// <param name="filter">The filter to evaluate.</param>
+        /// <returns>A <see cref="Filter{T}"/> that transposes the
+        /// item type for the other filter and returns what it evaluates to.</returns>
+        public static Filter<T> SelectMethod<T, S>(Func<T, S> transpose, Filter<S> filter)
+            => new SelectFilter<T, S>(item => transpose(item), filter);
 
         /// <summary>
         /// Gives a <see cref="Filter{T}"/> that always evaluates to true.
@@ -86,6 +83,22 @@ namespace CompiledFilters
         /// <typeparam name="T">The type of the items.</typeparam>
         /// <returns>A <see cref="Filter{T}"/> that always evaluates to true.</returns>
         public static Filter<T> True<T>() => new TrueFilter<T>();
+
+        /// <summary>
+        /// Creates a <see cref="Filter{T}"/> from a Lambda Expression.
+        /// </summary>
+        /// <typeparam name="T">The type of the items.</typeparam>
+        /// <param name="predicate">The filter function.</param>
+        /// <returns>The <see cref="Filter{T}"/> using the given function.</returns>
+        public static Filter<T> With<T>(Expression<Predicate<T>> predicate) => new ExpressionFilter<T>(predicate);
+
+        /// <summary>
+        /// Creates a <see cref="Filter{T}"/> from a delegate.
+        /// </summary>
+        /// <typeparam name="T">The type of the items.</typeparam>
+        /// <param name="predicate">The filter function.</param>
+        /// <returns>The <see cref="Filter{T}"/> using the given function.</returns>
+        public static Filter<T> WithMethod<T>(Predicate<T> predicate) => new ExpressionFilter<T>(item => predicate(item));
 
         /// <summary>
         /// Links two <see cref="Filter{T}"/>s together using a binary xor.

@@ -14,7 +14,7 @@ namespace CompiledFilters
         /// </summary>
         protected CustomFilter()
         {
-            FilterExpression = ((Predicate<T>)Matches).GetMethodCall(Parameter);
+            FilterExpression = ((Predicate<T>)Matches).GetInvocation(Parameter);
         }
 
         /// <summary>

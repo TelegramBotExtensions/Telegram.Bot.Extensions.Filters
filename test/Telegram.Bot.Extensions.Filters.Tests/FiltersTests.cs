@@ -27,7 +27,7 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         [Fact]
         public void Test2()
         {
-            var filter = Filter.FromMethod<Message>(testFilter).GetCompiledFilter();
+            var filter = Filter.WithMethod<Message>(testFilter).GetCompiledFilter();
 
             Assert.True(filter(_message));
         }
@@ -37,7 +37,7 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         {
             var filter = (Filter.Select(
                               (Message msg) => msg.From,
-                              Filter.FromLambda((User user) => user.IsBot))
+                              Filter.With((User user) => user.IsBot))
                          & new TextFilter("foo")).GetCompiledFilter();
 
             Assert.True(filter(_message));
@@ -46,7 +46,7 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         [Fact]
         public void Test4()
         {
-            var filter = Filter.FromLambda((Message msg) => msg.From.IsBot).GetCompiledFilter();
+            var filter = Filter.With((Message msg) => msg.From.IsBot).GetCompiledFilter();
 
             Assert.True(filter(_message));
         }

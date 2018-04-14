@@ -8,6 +8,6 @@ namespace Telegram.Bot.Extensions.Filters
     {
         public static readonly IsBotFilter IsBot = new IsBotFilter();
 
-        public static readonly Filter<Message> IsForwarded = Filter.FromLambda<Message>(m => m.ForwardFromChat != null || m.ForwardFrom != null);
+        public static readonly Filter<Message> IsForwarded = Filter.With<Message>(m => m.ForwardFromChat != null || m.ForwardFrom != null);
     }
 }
