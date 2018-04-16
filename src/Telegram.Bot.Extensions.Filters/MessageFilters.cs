@@ -1,7 +1,6 @@
 using System.Text.RegularExpressions;
 using CompiledFilters;
 using Telegram.Bot.Extensions.Filters.CustomFilters;
-using Telegram.Bot.Extensions.Filters.Messages;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
