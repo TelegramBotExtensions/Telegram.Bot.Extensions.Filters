@@ -41,7 +41,7 @@ namespace Telegram.Bot.Extensions.Filters.Tests
                             (Message msg) => msg.From)
                          & MessageFilters.Text("foo"));
 
-            var compliedFilter = filter..GetCompiledFilter();
+            var compliedFilter = filter.GetCompiledFilter();
 
             Assert.True(compliedFilter(_message));
         }
