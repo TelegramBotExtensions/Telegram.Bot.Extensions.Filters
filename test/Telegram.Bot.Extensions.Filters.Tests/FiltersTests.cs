@@ -1,5 +1,5 @@
 using CompiledFilters;
-using Telegram.Bot.Extensions.Filters.Messages;
+using Telegram.Bot.Extensions.Filters;
 using Telegram.Bot.Types;
 using Xunit;
 
@@ -20,7 +20,7 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         [Fact]
         public void Test1()
         {
-            var filter = MessageFilters.IsBot.GetCompiledFilter();
+            var filter = MessageFilters.FromBot.GetCompiledFilter();
 
             Assert.True(filter(_message));
         }
@@ -28,7 +28,7 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         [Fact]
         public void Test2()
         {
-            var filter = Filter.WithMethod<Message>(testFilter).GetCompiledFilter();
+            var filter = Filter.WithMethod<Message>(_testFilter).GetCompiledFilter();
 
             Assert.True(filter(_message));
         }
@@ -37,11 +37,13 @@ namespace Telegram.Bot.Extensions.Filters.Tests
         public void Test3()
         {
             var filter = (Filter.Using(
-                              Filter.With((User user) => user.IsBot),
-                (Message msg) => msg.From)
-                         & new TextFilter("foo")).GetCompiledFilter();
+                            Filter.With((User user) => user.IsBot),
+                            (Message msg) => msg.From)
+                         & MessageFilters.Text("foo"));
 
-            Assert.True(filter(_message));
+            var compliedFilter = filter..GetCompiledFilter();
+
+            Assert.True(compliedFilter(_message));
         }
 
         [Fact]
@@ -52,21 +54,6 @@ namespace Telegram.Bot.Extensions.Filters.Tests
             Assert.True(filter(_message));
         }
 
-        // Compiler prevents Expression with body.
-        //[Fact]
-        //public void TestExpressionBody()
-        //{
-        //    var filter = Filter.With((Message msg) =>
-        //    {
-        //        var userId = msg.From.Id;
-        //        ++userId;
-
-        //        return userId > 1;
-        //    }).GetCompiledFilter();
-
-        //    Assert.True(filter(_message));
-        //}
-
-        private static bool testFilter(Message m) => true;
+        private static bool _testFilter(Message m) => true;
     }
 }
