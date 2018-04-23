@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6A3E33B5-5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telegram.Bot.Extensions.Filters.Tests", "test\Telegram.Bot.Extensions.Filters.Tests\Telegram.Bot.Extensions.Filters.Tests.csproj", "{167660B9-C645-4E8F-B639-0025F6856B7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompiledFilters", "src\CompiledFilters\CompiledFilters.csproj", "{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,18 +45,6 @@ Global
 		{167660B9-C645-4E8F-B639-0025F6856B7B}.Release|x64.Build.0 = Release|Any CPU
 		{167660B9-C645-4E8F-B639-0025F6856B7B}.Release|x86.ActiveCfg = Release|Any CPU
 		{167660B9-C645-4E8F-B639-0025F6856B7B}.Release|x86.Build.0 = Release|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Debug|x64.Build.0 = Debug|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Debug|x86.Build.0 = Debug|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Release|x64.ActiveCfg = Release|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Release|x64.Build.0 = Release|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Release|x86.ActiveCfg = Release|Any CPU
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,7 +52,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{86BE1146-8421-41A4-BB1E-3A1A0105D037} = {50927DF4-336C-4EFF-BAFE-F2BD0037CD41}
 		{167660B9-C645-4E8F-B639-0025F6856B7B} = {6A3E33B5-5272-49C9-8A0B-417741C0E19C}
-		{B6A6EDBB-5686-4CAC-B576-A895250FDB9C} = {50927DF4-336C-4EFF-BAFE-F2BD0037CD41}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D475535-2919-447E-8969-BA91433278C0}

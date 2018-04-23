@@ -1,40 +1,29 @@
-version: CI-Build-{build}
-max_jobs: 1
+version: 1.0.{build}-alpha
 image: Visual Studio 2017
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+  
 before_build:
   - nuget restore Telegram.Bot.Extensions.Filters.sln
+
 build:
-  project: Telegram.Bot.Extensions.Filters.sln
   publish_nuget: true
+  publish_nuget_symbols: true
   verbosity: normal
-after_build:
-  - cmd: cd test/Telegram.Bot.Extensions.Filters.Tests
-  - cmd: dotnet test
-test: off
+  
 nuget:
   disable_publish_on_pr: true
+  
 deploy:
   - provider: NuGet
     api_key:
       secure: tsJ7bmzSgZOeIpPL1GcpBkGcz6H4Ymrms4kmr/Q2RBTO3qNDA5A5HIDsjoAsVwLe
     on:
-      branch: master
       appveyor_repo_tag: true
-
-for:
-
--
-  branches:
-    only:
-      - master
-
-  configuration: Release
-
--
-  branches:
-    except:
-      - master
-
-  configuration: Debug
-  build:
-    publish_nuget_symbols: true

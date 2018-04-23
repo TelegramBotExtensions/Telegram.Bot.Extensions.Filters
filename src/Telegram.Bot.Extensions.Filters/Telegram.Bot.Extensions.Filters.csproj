@@ -2,11 +2,22 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0-alpha</Version>
+    <IsPackable>true</IsPackable>
+    <PackageLicenseUrl>https://github.com/TelegramBotExtensions/Telegram.Bot.Extensions.Filters/blob/develop/LICENCE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/TelegramBotExtensions/Telegram.Bot.Extensions.Filters</PackageProjectUrl>
+    <PackageIconUrl>http://banane9.github.io/favicon.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/TelegramBotExtensions/Telegram.Bot.Extensions.Filters</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>telegram, bot, extension, filters, client, api</PackageTags>
+    <Authors>Banane9, Tuscen</Authors>
+    <Company>TelegramBotExtensions</Company>
+    <Copyright>Banane9, Tuscen</Copyright>
+    <Description>Filters for Telegram.Bot using CompiledFilters.</Description>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CompiledFilters" Version="1.0.0" />
     <PackageReference Include="Telegram.Bot" Version="14.2.0-rc-452" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CompiledFilters\CompiledFilters.csproj" />
   </ItemGroup>
 </Project>
