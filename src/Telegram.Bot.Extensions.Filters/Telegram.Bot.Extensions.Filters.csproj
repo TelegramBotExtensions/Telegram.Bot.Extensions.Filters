@@ -16,6 +16,9 @@
     <Copyright>Banane9, Tuscen</Copyright>
     <Description>Filters for Telegram.Bot using CompiledFilters.</Description>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Telegram.Bot.Extensions.Filters.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CompiledFilters" Version="1.0.0" />
     <PackageReference Include="Telegram.Bot" Version="14.2.0-rc-452" />
